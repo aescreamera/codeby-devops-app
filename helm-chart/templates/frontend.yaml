@@ -82,8 +82,6 @@ spec:
             value: "{{ .Values.productCatalogService.name }}:3550"
           - name: CURRENCY_SERVICE_ADDR
             value: "{{ .Values.currencyService.name }}:7000"
-          - name: CART_SERVICE_ADDR
-            value: "{{ .Values.cartService.name }}:7070"
           - name: RECOMMENDATION_SERVICE_ADDR
             value: "{{ .Values.recommendationService.name }}:8080"
           - name: SHIPPING_SERVICE_ADDR
@@ -202,7 +200,6 @@ spec:
   - hosts:
     - istio-system/*
     - ./{{ .Values.adService.name }}.{{ .Release.Namespace }}.svc.cluster.local
-    - ./{{ .Values.cartService.name }}.{{ .Release.Namespace }}.svc.cluster.local
     - ./{{ .Values.checkoutService.name }}.{{ .Release.Namespace }}.svc.cluster.local
     - ./{{ .Values.currencyService.name }}.{{ .Release.Namespace }}.svc.cluster.local
     - ./{{ .Values.productCatalogService.name }}.{{ .Release.Namespace }}.svc.cluster.local
