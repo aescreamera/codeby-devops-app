@@ -28,14 +28,17 @@ pipeline {
                         "shoppingassistantservice"
                     ]
                     def builds = [:]
-                    for(service in services){
-                        builds[service] = {
-                            dir("src/${service}"){
+                    for (service in services) {
+                        def currentService = service
+
+                        builds[currentService] = {
+                            dir("src/${currentService}") {
                                 sh """
                                 docker build \
-                                -t ${REGISTRY}/${service}:${IMAGE_TAG} .
+                                -t ${REGISTRY}/${currentService}:${IMAGE_TAG} .
+
                                 docker push \
-                                ${REGISTRY}/${service}:${IMAGE_TAG}
+                                ${REGISTRY}/${currentService}:${IMAGE_TAG}
                                 """
                             }
                         }
