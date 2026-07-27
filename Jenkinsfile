@@ -59,7 +59,7 @@ pipeline {
                     helm-chart \
                     --namespace boutique \
                     --create-namespace \
-                    --set images.repository=${REGISTRY}
+                    --set images.repository=${REGISTRY} \
                     --set images.tag=${IMAGE_TAG}
                     """
                 }
