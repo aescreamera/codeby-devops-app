@@ -72,7 +72,10 @@ pipeline {
                         variable: 'KUBECONFIG')
                     ]) {
                     sh """
-                    kubectl rollout status deployment --all -n boutique
+                    for deployment in $(kubectl get deployments -n boutique -o name); do
+                        kubectl rollout status $deployment -n boutique
+                    done
+                    kubectl get pods -n boutique
                     """
                 }
             }
