@@ -16,29 +16,29 @@ pipeline {
             steps {
                 script {
                     def services = [
-                        "frontend",
-                        "adservice",
-                        "checkoutservice",
-                        "currencyservice",
-                        "emailservice",
-                        "paymentservice",
-                        "productcatalogservice",
-                        "recommendationservice",
-                        "shippingservice",
-                        "shoppingassistantservice"
+                        "frontend": "src/frontend",
+                        "adservice": "src/adservice",
+                        "cartservice": "src/cartservice/src",
+                        "checkoutservice": "src/checkoutservice",
+                        "currencyservice": "src/currencyservice",
+                        "emailservice": "src/emailservice",
+                        "paymentservice": "src/paymentservice",
+                        "productcatalogservice": "src/productcatalogservice",
+                        "recommendationservice": "src/recommendationservice",
+                        "shippingservice": "src/shippingservice",
+                        "loadgenerator": "src/loadgenerator",
+                        "shoppingassistantservice": "src/shoppingassistantservice"
                     ]
                     def builds = [:]
-                    for (service in services) {
-                        def currentService = service
-
-                        builds[currentService] = {
-                            dir("src/${currentService}") {
+                    services.each { service, path ->
+                        builds[service] = {
+                            dir(path) {
                                 sh """
                                 docker build \
-                                -t ${REGISTRY}/${currentService}:${IMAGE_TAG} .
+                                -t ${REGISTRY}/${service}:${IMAGE_TAG} .
 
                                 docker push \
-                                ${REGISTRY}/${currentService}:${IMAGE_TAG}
+                                ${REGISTRY}/${service}:${IMAGE_TAG}
                                 """
                             }
                         }

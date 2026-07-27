@@ -54,6 +54,9 @@ cartService:
     limits:
       cpu: 300m
       memory: 256Mi
+  image:
+    repository: gcr.io/google-samples/microservices-demo/cartservice
+    tag: v0.10.3
 
 checkoutService:
   create: true
