@@ -1,5 +1,7 @@
 pipeline {
-    agent any
+    agent {
+        label 'jenkins-agent'
+    }
     environment {
         REGISTRY = "cr.yandex/crps7usnpsm729ptcit7"
         IMAGE_TAG = "${BUILD_NUMBER}"
@@ -39,14 +41,16 @@ pipeline {
                             }
                         }
                     }
-                    parallel builds
+                    builds.each { name, build ->
+                        build()
+                    }
                 }
             }
         }
         stage('Deploy') {
             steps {
                 withCredentials([
-                    file(credentialsId: 'kubeconfig',
+                    file(credentialsId: 'kubeconfig-yc',
                         variable: 'KUBECONFIG')
                     ]) {
                     sh """
@@ -54,6 +58,8 @@ pipeline {
                     --install boutique \
                     helm-chart \
                     --namespace boutique \
+                    --create-namespace \
+                    --set images.repository=${REGISTRY}
                     --set images.tag=${IMAGE_TAG}
                     """
                 }
@@ -62,11 +68,11 @@ pipeline {
         stage('Rollout') {
             steps {
                 withCredentials([
-                    file(credentialsId: 'kubeconfig',
+                    file(credentialsId: 'kubeconfig-yc',
                         variable: 'KUBECONFIG')
                     ]) {
                     sh """
-                    kubectl rollout status deployment/frontend -n boutique
+                    kubectl rollout status deployment --all -n boutique
                     """
                 }
             }
