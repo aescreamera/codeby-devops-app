@@ -71,12 +71,11 @@ pipeline {
                     file(credentialsId: 'kubeconfig-yc',
                         variable: 'KUBECONFIG')
                     ]) {
-                    sh """
+                    sh '''
                     for deployment in $(kubectl get deployments -n boutique -o name); do
                         kubectl rollout status $deployment -n boutique
                     done
-                    kubectl get pods -n boutique
-                    """
+                    '''
                 }
             }
         }
